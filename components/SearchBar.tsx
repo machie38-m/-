@@ -20,7 +20,7 @@ export default function SearchBar({ mobile, onSearch }: { mobile?: boolean, onSe
     <form onSubmit={handleSearch} className={`relative ${mobile ? 'block w-full' : 'hidden sm:block'}`}>
       <input
         type="text"
-        placeholder="Search anime..."
+        placeholder="Cari anime..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className={`bg-[#2a2c2e] border-none rounded-full py-2 px-4 pr-10 text-sm focus:ring-1 focus:ring-primary outline-none text-white ${mobile ? 'w-full' : 'w-64'}`}

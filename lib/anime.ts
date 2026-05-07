@@ -13,7 +13,7 @@ export async function getRecentEpisodes(page = 1) {
   }
 }
 
-export async function getTopAiring(page = 1) {
+export async function getTopAiring() {
   try {
     // AnimePahe doesn't have a direct fetchTopAiring in its type defs,
     // and its search only takes 1 argument
@@ -25,7 +25,7 @@ export async function getTopAiring(page = 1) {
   }
 }
 
-export async function searchAnime(query: string, page = 1) {
+export async function searchAnime(query: string) {
   try {
     const results = await animeProvider.search(query);
     return results;

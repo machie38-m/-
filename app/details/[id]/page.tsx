@@ -18,13 +18,14 @@ export default async function AnimeDetailsPage({
   }
 
   const title = getTitle(anime.title);
+  const placeholderImage = "https://placehold.co/300x400/1a1c1e/ffffff?text=No+Image";
 
   return (
     <div className="pb-12">
       {/* Banner */}
       <div className="relative h-[40vh] md:h-[50vh] w-full">
         <img
-          src={anime.image || ""}
+          src={anime.image || placeholderImage}
           alt={title}
           className="w-full h-full object-cover blur-sm opacity-30"
         />
@@ -36,7 +37,7 @@ export default async function AnimeDetailsPage({
           {/* Poster */}
           <div className="w-40 md:w-64 flex-shrink-0 mx-auto md:mx-0">
             <img
-              src={anime.image || ""}
+              src={anime.image || placeholderImage}
               alt={title}
               className="w-full aspect-[3/4] object-cover rounded-lg shadow-2xl border border-white/10"
             />
@@ -45,7 +46,7 @@ export default async function AnimeDetailsPage({
           {/* Details */}
           <div className="flex-grow text-center md:text-left">
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-4">
-              <span className="text-sm font-medium text-gray-400">Home</span>
+              <span className="text-sm font-medium text-gray-400">Beranda</span>
               <span className="w-1 h-1 bg-gray-600 rounded-full" />
               <span className="text-sm font-medium text-gray-400">{anime.type}</span>
               <span className="w-1 h-1 bg-gray-600 rounded-full" />
@@ -87,7 +88,7 @@ export default async function AnimeDetailsPage({
                 href={`/watch/${id}/${anime.episodes[0].id}`}
                 className="inline-flex items-center gap-2 bg-primary text-black px-10 py-4 rounded-full font-black text-lg hover:bg-primary/90 transition-transform hover:scale-105 shadow-lg shadow-primary/20"
               >
-                <Play className="w-6 h-6 fill-current" /> WATCH NOW
+                <Play className="w-6 h-6 fill-current" /> TONTON SEKARANG
               </Link>
             )}
           </div>
@@ -98,7 +99,7 @@ export default async function AnimeDetailsPage({
           <div className="flex items-center gap-4 mb-8">
             <h2 className="text-2xl font-bold flex items-center gap-2">
               <span className="w-1.5 h-8 bg-primary rounded-full" />
-              List of Episodes
+              Daftar Episode
             </h2>
             <div className="flex-grow h-px bg-[#2a2c2e]" />
           </div>

@@ -10,11 +10,13 @@ interface AnimeCardProps {
 }
 
 export default function AnimeCard({ id, title, image, episodeNumber, type }: AnimeCardProps) {
+  const placeholderImage = "https://placehold.co/300x400/1a1c1e/ffffff?text=No+Image";
+
   return (
     <Link href={`/details/${id}`} className="group relative block overflow-hidden rounded-md bg-[#1a1c1e] transition-transform duration-300 hover:-translate-y-1">
       <div className="relative aspect-[3/4] w-full">
         <img
-          src={image}
+          src={image || placeholderImage}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           loading="lazy"

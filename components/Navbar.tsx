@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Menu, User, X } from 'lucide-react';
+import { Menu, User, X } from 'lucide-react';
 import { useState } from 'react';
 import SearchBar from './SearchBar';
 
@@ -16,10 +16,10 @@ export default function Navbar() {
             <span className="text-primary">ANIME</span>WATCH
           </Link>
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-            <Link href="/movies" className="hover:text-primary transition-colors">Movies</Link>
-            <Link href="/tv-series" className="hover:text-primary transition-colors">TV Series</Link>
-            <Link href="/most-popular" className="hover:text-primary transition-colors">Most Popular</Link>
+            <Link href="/" className="hover:text-primary transition-colors">Beranda</Link>
+            <Link href="/movies" className="hover:text-primary transition-colors">Film</Link>
+            <Link href="/tv-series" className="hover:text-primary transition-colors">Serial TV</Link>
+            <Link href="/most-popular" className="hover:text-primary transition-colors">Paling Populer</Link>
           </div>
         </div>
 
@@ -45,10 +45,10 @@ export default function Navbar() {
             <div className="pb-4 border-b border-white/10">
               <SearchBar mobile onSearch={() => setIsMenuOpen(false)} />
             </div>
-            <Link onClick={() => setIsMenuOpen(false)} href="/" className="hover:text-primary transition-colors border-b border-white/10 pb-4">Home</Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/movies" className="hover:text-primary transition-colors border-b border-white/10 pb-4">Movies</Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/tv-series" className="hover:text-primary transition-colors border-b border-white/10 pb-4">TV Series</Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/most-popular" className="hover:text-primary transition-colors border-b border-white/10 pb-4">Most Popular</Link>
+            <Link onClick={() => setIsMenuOpen(false)} href="/" className="hover:text-primary transition-colors border-b border-white/10 pb-4">Beranda</Link>
+            <Link onClick={() => setIsMenuOpen(false)} href="/movies" className="hover:text-primary transition-colors border-b border-white/10 pb-4">Film</Link>
+            <Link onClick={() => setIsMenuOpen(false)} href="/tv-series" className="hover:text-primary transition-colors border-b border-white/10 pb-4">Serial TV</Link>
+            <Link onClick={() => setIsMenuOpen(false)} href="/most-popular" className="hover:text-primary transition-colors border-b border-white/10 pb-4">Paling Populer</Link>
           </div>
         </div>
       )}
