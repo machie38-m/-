@@ -1,6 +1,7 @@
 import { searchAnime } from "@/lib/anime";
 import AnimeCard from "@/components/AnimeCard";
 import { AnimeResult } from "@/lib/types";
+import { getTitle } from "@/lib/utils";
 
 export default async function SearchPage({
   searchParams,
@@ -32,7 +33,7 @@ export default async function SearchPage({
             <AnimeCard
               key={anime.id}
               id={anime.id}
-              title={anime.title.toString()}
+              title={getTitle(anime.title)}
               image={anime.image || ""}
               type={anime.type}
             />

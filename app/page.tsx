@@ -3,6 +3,7 @@ import AnimeCard from "@/components/AnimeCard";
 import { ChevronRight, Play } from "lucide-react";
 import Link from "next/link";
 import { AnimeResult } from "@/lib/types";
+import { getTitle } from "@/lib/utils";
 
 export default async function Home() {
   const [recentEpisodes, topAiring] = await Promise.all([
@@ -20,7 +21,7 @@ export default async function Home() {
           <div className="absolute inset-0">
             <img
               src={featured.image || ""}
-              alt={featured.title.toString()}
+              alt={getTitle(featured.title)}
               className="w-full h-full object-cover blur-[2px] scale-105 opacity-40"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
@@ -32,7 +33,7 @@ export default async function Home() {
               <span className="text-xs font-medium text-white/70">#1 Trending Now</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black mb-4 max-w-2xl leading-tight">
-              {featured.title.toString()}
+              {getTitle(featured.title)}
             </h1>
             <div className="flex flex-wrap items-center gap-4 mb-8 text-sm md:text-base font-medium">
               <span className="flex items-center gap-1.5">
@@ -78,7 +79,7 @@ export default async function Home() {
               <AnimeCard
                 key={anime.id}
                 id={anime.id}
-                title={anime.title.toString()}
+                title={getTitle(anime.title)}
                 image={anime.image || ""}
                 episodeNumber={anime.episodeNumber}
               />
@@ -102,7 +103,7 @@ export default async function Home() {
               <AnimeCard
                 key={anime.id}
                 id={anime.id}
-                title={anime.title.toString()}
+                title={getTitle(anime.title)}
                 image={anime.image || ""}
                 type="TV"
               />

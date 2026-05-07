@@ -1,6 +1,8 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+export function getTitle(title: any): string {
+    if (!title) return 'Unknown Title';
+    if (typeof title === 'string') return title;
+    if (typeof title === 'object') {
+        return title.english || title.romaji || title.native || 'Unknown Title';
+    }
+    return String(title);
 }

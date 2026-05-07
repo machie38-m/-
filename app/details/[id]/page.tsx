@@ -3,6 +3,7 @@ import { Play, Star, Calendar } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AnimeInfo, Episode } from "@/lib/types";
+import { getTitle } from "@/lib/utils";
 
 export default async function AnimeDetailsPage({
   params,
@@ -16,25 +17,27 @@ export default async function AnimeDetailsPage({
     return notFound();
   }
 
+  const title = getTitle(anime.title);
+
   return (
     <div className="pb-12">
       {/* Banner */}
       <div className="relative h-[40vh] md:h-[50vh] w-full">
         <img
           src={anime.image || ""}
-          alt={anime.title.toString()}
+          alt={title}
           className="w-full h-full object-cover blur-sm opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 -mt-32 relative z-10">
-        <div className="flex flex-col md:flex-row gap-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-32 relative z-10">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8">
           {/* Poster */}
-          <div className="w-48 md:w-64 flex-shrink-0 mx-auto md:mx-0">
+          <div className="w-40 md:w-64 flex-shrink-0 mx-auto md:mx-0">
             <img
               src={anime.image || ""}
-              alt={anime.title.toString()}
+              alt={title}
               className="w-full aspect-[3/4] object-cover rounded-lg shadow-2xl border border-white/10"
             />
           </div>
@@ -46,11 +49,11 @@ export default async function AnimeDetailsPage({
               <span className="w-1 h-1 bg-gray-600 rounded-full" />
               <span className="text-sm font-medium text-gray-400">{anime.type}</span>
               <span className="w-1 h-1 bg-gray-600 rounded-full" />
-              <span className="text-sm font-medium text-white">{anime.title.toString()}</span>
+              <span className="text-sm font-medium text-white">{title}</span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-black mb-6">
-              {anime.title.toString()}
+              {title}
             </h1>
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 mb-8">

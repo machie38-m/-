@@ -1,8 +1,9 @@
 import { getAnimeInfo, getEpisodeSources } from "@/lib/anime";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, ChevronRight, List, Info } from "lucide-react";
+import { ChevronLeft, ChevronRight, List } from "lucide-react";
 import { AnimeInfo, Episode } from "@/lib/types";
+import { getTitle } from "@/lib/utils";
 
 export default async function WatchPage({
   params,
@@ -24,30 +25,31 @@ export default async function WatchPage({
     return notFound();
   }
 
+  const title = getTitle(anime.title);
   const currentEpisode = anime.episodes?.find((ep: Episode) => ep.id === episodeId);
   const currentIndex = anime.episodes?.findIndex((ep: Episode) => ep.id === episodeId) ?? -1;
   const prevEpisode = currentIndex > 0 && anime.episodes ? anime.episodes[currentIndex - 1] : null;
   const nextEpisode = anime.episodes && currentIndex < (anime.episodes.length - 1) ? anime.episodes[currentIndex + 1] : null;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <div className="flex flex-col lg:flex-row gap-8">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-8">
+      <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
         {/* Main Player Area */}
         <div className="flex-grow">
           {/* Breadcrumbs */}
           <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400 mb-4 overflow-hidden whitespace-nowrap">
             <Link href="/" className="hover:text-primary">Home</Link>
             <span>/</span>
-            <Link href={`/details/${id}`} className="hover:text-primary truncate">{anime.title.toString()}</Link>
+            <Link href={`/details/${id}`} className="hover:text-primary truncate">{title}</Link>
             <span>/</span>
             <span className="text-white">Episode {currentEpisode?.number || 'Playing'}</span>
           </div>
 
           {/* Video Player */}
           <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-[#2a2c2e]">
-            {sources.headers?.Referer || sources.download?.[0]?.url ? (
+            {sources.sources?.[0]?.url ? (
                 <iframe
-                    src={sources.headers?.Referer || sources.download?.[0]?.url}
+                    src={sources.sources[0].url}
                     className="absolute inset-0 w-full h-full"
                     allowFullScreen
                     scrolling="no"
@@ -76,7 +78,7 @@ export default async function WatchPage({
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 bg-[#1a1c1e] p-4 rounded-lg border border-[#2a2c2e]">
             <div className="flex items-center gap-4">
               <h1 className="text-lg md:text-xl font-bold">
-                {currentEpisode ? `EP ${currentEpisode.number}: ` : ''} <span className="font-medium text-gray-400">{anime.title.toString()}</span>
+                {currentEpisode ? `EP ${currentEpisode.number}: ` : ''} <span className="font-medium text-gray-400">{title}</span>
               </h1>
             </div>
 
