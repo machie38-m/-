@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANIMEWATCH - Nonton Anime Gratis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #ccff00; }
+        body { background-color: #0b0c0d; color: white; font-family: sans-serif; }
+        .text-primary { color: var(--primary); }
+        .bg-primary { background-color: var(--primary); }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <!-- Header -->
+    <nav class="bg-[#1a1c1e] p-4 sticky top-0 z-50 flex justify-between items-center shadow-md">
+        <h1 class="text-xl font-black italic tracking-tighter"><span class="text-primary">ANIME</span>WATCH</h1>
+        <div class="flex gap-4">
+            <i class="fas fa-search text-lg" onclick="toggleSearch()"></i>
+            <i class="fas fa-user text-lg"></i>
+        </div>
+    </nav>
+
+    <!-- Search Overlay -->
+    <div id="searchOverlay" class="fixed inset-0 bg-black/95 z-[60] hidden p-6">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold">Cari Anime</h2>
+            <i class="fas fa-times text-2xl" onclick="toggleSearch()"></i>
+        </div>
+        <div class="relative">
+            <input type="text" id="searchInput" placeholder="Ketik judul anime..." class="w-full bg-[#1a1c1e] border-none rounded-full py-4 px-6 outline-none focus:ring-2 focus:ring-primary">
+            <button onclick="performSearch()" class="absolute right-4 top-3.5 text-primary">
+                <i class="fas fa-search text-xl"></i>
+            </button>
+        </div>
+        <div id="searchResults" class="mt-8 grid grid-cols-2 gap-4"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative h-[60vh] w-full overflow-hidden">
+        <img src="https://gogocdn.net/cover/oshi-no-ko-2nd-season.png" class="w-full h-full object-cover opacity-40 blur-[1px]">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0b0c0d] via-transparent to-transparent"></div>
+        <div class="absolute bottom-10 left-6 right-6">
+            <div class="text-primary text-xs font-bold mb-2">TERBARU</div>
+            <h2 class="text-3xl font-black mb-4">Oshi no Ko Season 2</h2>
+            <button class="bg-primary text-black font-bold px-8 py-3 rounded-full flex items-center gap-2">
+                <i class="fas fa-play"></i> TONTON SEKARANG
+            </button>
+        </div>
+    </section>
+
+    <!-- Content Sections -->
+    <div class="p-6 space-y-10">
+        <section>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold border-l-4 border-primary pl-3">Rilis Terbaru</h3>
+                <span class="text-sm text-gray-500">Lihat Semua</span>
+            </div>
+            <div id="latestAnime" class="grid grid-cols-2 gap-4">
+                <!-- Data will be loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="fixed bottom-0 left-0 right-0 bg-[#1a1c1e] border-t border-white/10 flex justify-around py-3 z-50">
+        <div class="flex flex-col items-center gap-1 text-primary">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-[10px]">Beranda</span>
+        </div>
+        <div class="flex flex-col items-center gap-1 text-gray-400" onclick="toggleSearch()">
+            <i class="fas fa-search text-xl"></i>
+            <span class="text-[10px]">Cari</span>
+        </div>
+        <div class="flex flex-col items-center gap-1 text-gray-400">
+            <i class="fas fa-film text-xl"></i>
+            <span class="text-[10px]">Film</span>
+        </div>
+        <div class="flex flex-col items-center gap-1 text-gray-400">
+            <i class="fas fa-fire text-xl"></i>
+            <span class="text-[10px]">Populer</span>
+        </div>
+    </div>
+
+    <script>
+        // Fake data since real API requires CORS proxy or backend
+        const dummyData = [
+            { id: "naruto", title: "Naruto Shippuden", image: "https://gogocdn.net/cover/naruto-shippuden.png", ep: "500" },
+            { id: "one-piece", title: "One Piece", image: "https://gogocdn.net/images/anime/One-piece.jpg", ep: "1100" },
+            { id: "jujutsu", title: "Jujutsu Kaisen", image: "https://gogocdn.net/cover/jujutsu-kaisen-tv.png", ep: "24" },
+            { id: "demon-slayer", title: "Demon Slayer", image: "https://gogocdn.net/cover/kimetsu-no-yaiba.png", ep: "26" }
+        ];
+
+        function loadLatest() {
+            const container = document.getElementById('latestAnime');
+            dummyData.forEach(anime => {
+                container.innerHTML += `
+                    <div class="relative rounded-lg overflow-hidden bg-[#1a1c1e]" onclick="watch('${anime.id}')">
+                        <img src="${anime.image}" class="w-full aspect-[3/4] object-cover">
+                        <div class="absolute top-2 left-2 bg-primary text-black text-[10px] font-bold px-1.5 py-0.5 rounded">EP ${anime.ep}</div>
+                        <div class="p-2">
+                            <p class="text-sm font-medium line-clamp-2">${anime.title}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleSearch() {
+            const overlay = document.getElementById('searchOverlay');
+            overlay.classList.toggle('hidden');
+        }
+
+        function performSearch() {
+            const q = document.getElementById('searchInput').value;
+            const results = document.getElementById('searchResults');
+            results.innerHTML = '<p class="col-span-2 text-center py-10">Mencari: ' + q + '...</p>';
+
+            setTimeout(() => {
+                results.innerHTML = '';
+                dummyData.forEach(anime => {
+                    results.innerHTML += `
+                        <div class="flex gap-3 bg-[#1a1c1e] p-2 rounded-lg" onclick="watch('${anime.id}')">
+                            <img src="${anime.image}" class="w-12 h-16 object-cover rounded">
+                            <div>
+                                <p class="text-xs font-bold line-clamp-2">${anime.title}</p>
+                                <p class="text-[10px] text-gray-500 mt-1">TV Series</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            }, 1000);
+        }
+
+        function watch(id) {
+            alert('Menyiapkan pemutar video untuk: ' + id + '\n\nDalam versi HTML statis, fitur streaming memerlukan server aktif. Gunakan versi Next.js untuk fitur lengkap!');
+        }
+
+        window.onload = loadLatest;
+    </script>
+</body>
+</html>
