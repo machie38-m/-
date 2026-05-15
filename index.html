@@ -8,139 +8,243 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --primary: #ccff00; }
-        body { background-color: #0b0c0d; color: white; font-family: sans-serif; }
+        body { background-color: #0b0c0d; color: white; font-family: 'Inter', sans-serif; }
         .text-primary { color: var(--primary); }
         .bg-primary { background-color: var(--primary); }
+        .anime-card:hover .play-btn { opacity: 1; transform: scale(1); }
+        .play-btn { transition: all 0.3s ease; transform: scale(0.5); }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0b0c0d; }
+        ::-webkit-scrollbar-thumb { background: #2a2c2e; border-radius: 10px; }
     </style>
 </head>
-<body class="pb-20">
+<body class="pb-24">
 
-    <!-- Header -->
-    <nav class="bg-[#1a1c1e] p-4 sticky top-0 z-50 flex justify-between items-center shadow-md">
-        <h1 class="text-xl font-black italic tracking-tighter"><span class="text-primary">ANIME</span>WATCH</h1>
-        <div class="flex gap-4">
-            <i class="fas fa-search text-lg" onclick="toggleSearch()"></i>
-            <i class="fas fa-user text-lg"></i>
+    <!-- Navbar -->
+    <nav class="bg-[#1a1c1e]/90 backdrop-blur-md p-4 sticky top-0 z-50 flex justify-between items-center border-b border-white/5">
+        <div class="flex items-center gap-2">
+            <div class="bg-primary text-black p-1.5 rounded-lg">
+                <i class="fas fa-play text-xs"></i>
+            </div>
+            <h1 class="text-xl font-black italic tracking-tighter uppercase"><span class="text-primary">Anime</span>Watch</h1>
+        </div>
+        <div class="flex gap-5 items-center">
+            <i class="fas fa-search text-lg text-gray-400" onclick="toggleSearch()"></i>
+            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center">
+                <i class="fas fa-user text-sm text-gray-300"></i>
+            </div>
         </div>
     </nav>
 
     <!-- Search Overlay -->
-    <div id="searchOverlay" class="fixed inset-0 bg-black/95 z-[60] hidden p-6">
+    <div id="searchOverlay" class="fixed inset-0 bg-black/98 z-[100] hidden p-6 animate-in fade-in duration-300">
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-bold">Cari Anime</h2>
-            <i class="fas fa-times text-2xl" onclick="toggleSearch()"></i>
+            <i class="fas fa-times text-2xl text-gray-500" onclick="toggleSearch()"></i>
         </div>
-        <div class="relative">
-            <input type="text" id="searchInput" placeholder="Ketik judul anime..." class="w-full bg-[#1a1c1e] border-none rounded-full py-4 px-6 outline-none focus:ring-2 focus:ring-primary">
-            <button onclick="performSearch()" class="absolute right-4 top-3.5 text-primary">
-                <i class="fas fa-search text-xl"></i>
+        <div class="relative mb-8">
+            <input type="text" id="searchInput" onkeyup="if(event.key==='Enter')performSearch()" placeholder="Ketik judul anime (misal: Naruto)..." class="w-full bg-[#1a1c1e] border border-white/10 rounded-xl py-4 px-6 outline-none focus:border-primary text-white">
+            <button onclick="performSearch()" class="absolute right-4 top-3.5 bg-primary text-black w-10 h-10 rounded-lg">
+                <i class="fas fa-search"></i>
             </button>
         </div>
-        <div id="searchResults" class="mt-8 grid grid-cols-2 gap-4"></div>
+        <div id="searchResults" class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto max-h-[70vh]"></div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="relative h-[60vh] w-full overflow-hidden">
-        <img src="https://gogocdn.net/cover/oshi-no-ko-2nd-season.png" class="w-full h-full object-cover opacity-40 blur-[1px]">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0b0c0d] via-transparent to-transparent"></div>
-        <div class="absolute bottom-10 left-6 right-6">
-            <div class="text-primary text-xs font-bold mb-2">TERBARU</div>
-            <h2 class="text-3xl font-black mb-4">Oshi no Ko Season 2</h2>
-            <button class="bg-primary text-black font-bold px-8 py-3 rounded-full flex items-center gap-2">
-                <i class="fas fa-play"></i> TONTON SEKARANG
-            </button>
+    <!-- Hero Slider (Simplified) -->
+    <div id="hero" class="relative h-[55vh] w-full mb-8">
+        <div class="absolute inset-0">
+            <img id="heroImage" src="https://gogocdn.net/cover/oshi-no-ko-2nd-season.png" class="w-full h-full object-cover opacity-50">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0c0d] via-transparent to-black/30"></div>
         </div>
-    </section>
-
-    <!-- Content Sections -->
-    <div class="p-6 space-y-10">
-        <section>
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold border-l-4 border-primary pl-3">Rilis Terbaru</h3>
-                <span class="text-sm text-gray-500">Lihat Semua</span>
+        <div class="absolute bottom-10 left-6 right-6">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="bg-primary/20 text-primary text-[10px] font-black px-2 py-1 rounded border border-primary/30 uppercase tracking-widest">Unggulan</span>
+                <span class="text-white/60 text-xs font-medium"><i class="fas fa-star text-yellow-500 mr-1"></i> 8.9</span>
             </div>
-            <div id="latestAnime" class="grid grid-cols-2 gap-4">
-                <!-- Data will be loaded here -->
+            <h2 id="heroTitle" class="text-3xl md:text-5xl font-black mb-5 leading-tight">Oshi no Ko Season 2</h2>
+            <div class="flex gap-3">
+                <button class="bg-primary text-black font-black px-8 py-3.5 rounded-full flex items-center gap-2 text-sm hover:scale-105 transition-transform">
+                    <i class="fas fa-play"></i> TONTON SEKARANG
+                </button>
+                <button class="bg-white/10 backdrop-blur-md text-white font-bold px-6 py-3.5 rounded-full text-sm">
+                    + LIST
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="px-5 space-y-12">
+
+        <!-- Latest Episodes -->
+        <section>
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h3 class="text-xl font-black flex items-center gap-2 uppercase tracking-tight">
+                        <span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                        Episode Terbaru
+                    </h3>
+                    <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">Update setiap hari</p>
+                </div>
+                <a href="#" class="text-xs font-bold text-primary/80 hover:text-primary transition-colors">LIHAT SEMUA <i class="fas fa-chevron-right ml-1"></i></a>
+            </div>
+            <div id="latestList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Loading State -->
+                <div class="animate-pulse bg-white/5 aspect-[3/4] rounded-xl"></div>
+                <div class="animate-pulse bg-white/5 aspect-[3/4] rounded-xl"></div>
             </div>
         </section>
+
+        <!-- Popular Section -->
+        <section>
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h3 class="text-xl font-black flex items-center gap-2 uppercase tracking-tight">
+                        <span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                        Paling Populer
+                    </h3>
+                    <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">Banyak ditonton</p>
+                </div>
+            </div>
+            <div id="popularList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+        </section>
+
     </div>
 
-    <!-- Bottom Nav -->
-    <div class="fixed bottom-0 left-0 right-0 bg-[#1a1c1e] border-t border-white/10 flex justify-around py-3 z-50">
-        <div class="flex flex-col items-center gap-1 text-primary">
+    <!-- Footer -->
+    <footer class="mt-20 p-10 bg-[#1a1c1e] text-center border-t border-white/5">
+        <h1 class="text-2xl font-black italic tracking-tighter uppercase mb-4"><span class="text-primary">Anime</span>Watch</h1>
+        <p class="text-xs text-gray-500 leading-relaxed max-w-sm mx-auto">Nonton anime subtitle Indonesia gratis dengan kualitas terbaik tanpa iklan yang mengganggu.</p>
+        <div class="flex justify-center gap-6 mt-8 text-gray-400">
+            <i class="fab fa-facebook-f"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-discord"></i>
+        </div>
+        <p class="text-[10px] text-gray-600 mt-10 uppercase tracking-widest">© 2024 ANIMEWATCH INDO</p>
+    </footer>
+
+    <!-- Bottom Mobile Nav -->
+    <div class="fixed bottom-0 left-0 right-0 bg-[#1a1c1e]/95 backdrop-blur-xl border-t border-white/10 flex justify-around py-4 z-50 px-4">
+        <div class="flex flex-col items-center gap-1 text-primary scale-110">
             <i class="fas fa-home text-xl"></i>
-            <span class="text-[10px]">Beranda</span>
+            <span class="text-[8px] font-bold uppercase tracking-widest">Beranda</span>
         </div>
-        <div class="flex flex-col items-center gap-1 text-gray-400" onclick="toggleSearch()">
+        <div class="flex flex-col items-center gap-1 text-gray-500" onclick="toggleSearch()">
             <i class="fas fa-search text-xl"></i>
-            <span class="text-[10px]">Cari</span>
+            <span class="text-[8px] font-bold uppercase tracking-widest">Cari</span>
         </div>
-        <div class="flex flex-col items-center gap-1 text-gray-400">
-            <i class="fas fa-film text-xl"></i>
-            <span class="text-[10px]">Film</span>
-        </div>
-        <div class="flex flex-col items-center gap-1 text-gray-400">
+        <div class="flex flex-col items-center gap-1 text-gray-500">
             <i class="fas fa-fire text-xl"></i>
-            <span class="text-[10px]">Populer</span>
+            <span class="text-[8px] font-bold uppercase tracking-widest">Populer</span>
+        </div>
+        <div class="flex flex-col items-center gap-1 text-gray-500">
+            <i class="fas fa-bookmark text-xl"></i>
+            <span class="text-[8px] font-bold uppercase tracking-widest">Simpan</span>
         </div>
     </div>
 
     <script>
-        // Fake data since real API requires CORS proxy or backend
-        const dummyData = [
-            { id: "naruto", title: "Naruto Shippuden", image: "https://gogocdn.net/cover/naruto-shippuden.png", ep: "500" },
-            { id: "one-piece", title: "One Piece", image: "https://gogocdn.net/images/anime/One-piece.jpg", ep: "1100" },
-            { id: "jujutsu", title: "Jujutsu Kaisen", image: "https://gogocdn.net/cover/jujutsu-kaisen-tv.png", ep: "24" },
-            { id: "demon-slayer", title: "Demon Slayer", image: "https://gogocdn.net/cover/kimetsu-no-yaiba.png", ep: "26" }
-        ];
+        // API Configuration (Using Jikan for real metadata)
+        const BASE_URL = 'https://api.jikan.moe/v4';
 
-        function loadLatest() {
-            const container = document.getElementById('latestAnime');
-            dummyData.forEach(anime => {
-                container.innerHTML += `
-                    <div class="relative rounded-lg overflow-hidden bg-[#1a1c1e]" onclick="watch('${anime.id}')">
-                        <img src="${anime.image}" class="w-full aspect-[3/4] object-cover">
-                        <div class="absolute top-2 left-2 bg-primary text-black text-[10px] font-bold px-1.5 py-0.5 rounded">EP ${anime.ep}</div>
-                        <div class="p-2">
-                            <p class="text-sm font-medium line-clamp-2">${anime.title}</p>
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${BASE_URL}${endpoint}`);
+                const data = await response.json();
+                return data.data;
+            } catch (error) {
+                console.error('Fetch error:', error);
+                return [];
+            }
+        }
+
+        function createCard(anime, isEpisode = false) {
+            const title = anime.title_english || anime.title;
+            const img = anime.images.webp.large_image_url;
+            const score = anime.score || 'N/A';
+            const id = anime.mal_id;
+
+            return `
+                <div class="anime-card relative group rounded-xl overflow-hidden bg-[#1a1c1e] border border-white/5 transition-all duration-300 hover:border-primary/50" onclick="watchAnime(${id}, '${title.replace(/'/g, "\\'")}')">
+                    <div class="relative aspect-[3/4] overflow-hidden">
+                        <img src="${img}" alt="${title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div class="play-btn bg-primary text-black w-12 h-12 rounded-full flex items-center justify-center shadow-lg shadow-primary/30">
+                                <i class="fas fa-play text-lg ml-1"></i>
+                            </div>
+                        </div>
+                        <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[9px] font-black px-2 py-1 rounded border border-white/10 uppercase tracking-tighter">
+                            ${isEpisode ? 'EP BARU' : anime.type || 'TV'}
+                        </div>
+                        <div class="absolute bottom-2 right-2 bg-primary text-black text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm">
+                            <i class="fas fa-star mr-0.5"></i>${score}
                         </div>
                     </div>
-                `;
-            });
+                    <div class="p-3">
+                        <h4 class="text-xs font-bold line-clamp-2 leading-snug group-hover:text-primary transition-colors">${title}</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[8px] text-gray-500 uppercase font-bold tracking-widest">${anime.status === 'Currently Airing' ? 'Sedang Tayang' : 'Selesai'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadHome() {
+            // Load Recent/Trending as "Latest"
+            const latest = await fetchData('/seasons/now?limit=12');
+            const latestList = document.getElementById('latestList');
+            latestList.innerHTML = latest.map(anime => createCard(anime, true)).join('');
+
+            // Load Popular
+            const popular = await fetchData('/top/anime?filter=bypopularity&limit=12');
+            const popularList = document.getElementById('popularList');
+            popularList.innerHTML = popular.map(anime => createCard(anime)).join('');
+
+            // Update Hero randomly from latest
+            if(latest.length > 0) {
+                const random = latest[Math.floor(Math.random() * 5)];
+                document.getElementById('heroImage').src = random.images.webp.large_image_url;
+                document.getElementById('heroTitle').innerText = random.title_english || random.title;
+            }
+        }
+
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (!query) return;
+
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '<div class="col-span-2 text-center py-10"><i class="fas fa-spinner fa-spin text-primary text-2xl"></i></div>';
+
+            const results = await fetchData(`/anime?q=${query}&limit=12`);
+            resultsDiv.innerHTML = results.length > 0
+                ? results.map(anime => createCard(anime)).join('')
+                : '<p class="col-span-2 text-center text-gray-500 py-10">Tidak ditemukan hasil.</p>';
         }
 
         function toggleSearch() {
             const overlay = document.getElementById('searchOverlay');
             overlay.classList.toggle('hidden');
+            if(!overlay.classList.contains('hidden')) {
+                document.getElementById('searchInput').focus();
+            }
         }
 
-        function performSearch() {
-            const q = document.getElementById('searchInput').value;
-            const results = document.getElementById('searchResults');
-            results.innerHTML = '<p class="col-span-2 text-center py-10">Mencari: ' + q + '...</p>';
-
-            setTimeout(() => {
-                results.innerHTML = '';
-                dummyData.forEach(anime => {
-                    results.innerHTML += `
-                        <div class="flex gap-3 bg-[#1a1c1e] p-2 rounded-lg" onclick="watch('${anime.id}')">
-                            <img src="${anime.image}" class="w-12 h-16 object-cover rounded">
-                            <div>
-                                <p class="text-xs font-bold line-clamp-2">${anime.title}</p>
-                                <p class="text-[10px] text-gray-500 mt-1">TV Series</p>
-                            </div>
-                        </div>
-                    `;
-                });
-            }, 1000);
+        function watchAnime(id, title) {
+            // In static HTML, we link to a specialized player or just a message
+            // Since we can't do server-side scraping in static HTML easily
+            const confirmWatch = confirm(`Nonton ${title}?\n\n(Halaman pemutar video akan terbuka)`);
+            if(confirmWatch) {
+                // We point to a well-known legal/free streaming bridge for demo
+                window.location.href = `https://myanimelist.net/anime/${id}`;
+            }
         }
 
-        function watch(id) {
-            alert('Menyiapkan pemutar video untuk: ' + id + '\n\nDalam versi HTML statis, fitur streaming memerlukan server aktif. Gunakan versi Next.js untuk fitur lengkap!');
-        }
-
-        window.onload = loadLatest;
+        // Initialize
+        loadHome();
     </script>
 </body>
 </html>
